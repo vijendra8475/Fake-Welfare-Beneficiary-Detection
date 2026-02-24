@@ -29,7 +29,7 @@ export default function FraudBarChart({ data }) {
   }
 
   return (
-    <div className="bg-gray-800 p-4 rounded-xl">
+    <div className="bg-white p-4 rounded-xl">
       <h2 className="text-xl font-semibold mb-4">
         Fraud % Per Beneficiary
       </h2>

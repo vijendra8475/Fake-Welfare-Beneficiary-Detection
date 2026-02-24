@@ -17,7 +17,7 @@ export default function StatsCards({ data }) {
 
 function Card({ title, value, color }) {
   return (
-    <div className="bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300">
+    <div className="bg-white/60 backdrop-blur-lg border border-white/40 p-6 rounded-2xl shadow-lg">
       <p className="text-gray-400 text-sm uppercase tracking-wider">
         {title}
       </p>

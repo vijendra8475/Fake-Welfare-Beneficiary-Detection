@@ -1,3 +1,4 @@
+import DashboardLayout from "../layout/DashboardLayout"
 import { sampleData } from "../data/sampleData"
 import StatsCards from "../components/StatsCards"
 import RiskPieChart from "../components/RiskPieChart"
@@ -7,21 +8,33 @@ import ManualEntryForm from "../components/ManualEntryForm"
 
 export default function Dashboard() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white p-8 space-y-8">
-      <h1 className="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-        Welfare Fraud Detection Dashboard
-      </h1>
+    <DashboardLayout>
+      
+      <div className="space-y-8">
 
-      <StatsCards data={sampleData} />
+        {/* Greeting */}
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800">
+            Hi, Admin 👋
+          </h1>
+          <p className="text-gray-600">
+            Here's your fraud detection overview
+          </p>
+        </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <RiskPieChart data={sampleData} />
-        <FraudBarChart data={sampleData} />
+        <StatsCards data={sampleData} />
+
+        <div className="grid md:grid-cols-2 gap-6">
+          <RiskPieChart data={sampleData} />
+          <FraudBarChart data={sampleData} />
+        </div>
+
+        <DataTable data={sampleData} />
+
+        <ManualEntryForm />
+
       </div>
 
-      <DataTable data={sampleData} />
-
-      <ManualEntryForm />
-    </div>
+    </DashboardLayout>
   )
 }
