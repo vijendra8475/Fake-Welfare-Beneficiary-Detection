@@ -1,6 +1,9 @@
 import { useState } from "react"
+import axios from "axios"
 
-export default function ManualEntryForm() {
+export default function ManualEntryForm({ setData, data, setLoading, loading }) {
+
+
   const [formData, setFormData] = useState({
     age: "",
     income: "",
@@ -13,19 +16,38 @@ export default function ManualEntryForm() {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: Number(e.target.value),
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log("Form Data:", formData)
-    alert("Check console for submitted data")
+    setLoading(true)
+
+    try {
+      const response = await axios.post("/api/predict", [formData])
+      const result = response.data[0]
+
+      const newEntry = {
+        beneficiary_id: `B${Date.now()}`,
+        fraud_percentage: result.fraud_percentage,
+        risk_level: result.risk_level,
+        score: result.score,
+      }
+
+      setData((prev) => [...prev, newEntry])
+      showToast("Prediction Successful ✅")
+
+    } catch (error) {
+      showToast("Prediction Failed ❌")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl shadow-xl">
-      <h2 className="text-xl font-semibold mb-4">
+    <div className="bg-white/60 backdrop-blur-lg border border-white/40 p-6 rounded-2xl shadow-lg">
+      <h2 className="text-xl font-semibold mb-4 text-gray-800">
         Manual Beneficiary Entry
       </h2>
 
@@ -39,18 +61,18 @@ export default function ManualEntryForm() {
             type="number"
             name={key}
             placeholder={key}
-            value={formData[key]}
             onChange={handleChange}
-            className="p-3 rounded-xl bg-gray-900/70 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 outline-none transition"
+            className="p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-black outline-none"
             required
           />
         ))}
 
         <button
           type="submit"
-          className="md:col-span-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90 transition-all p-3 rounded-xl font-semibold shadow-lg"
+          disabled={loading}
+          className="md:col-span-3 bg-black text-white p-3 rounded-xl font-semibold hover:opacity-90"
         >
-          Analyze Risk
+          {loading ? "Analyzing..." : "Analyze Risk"}
         </button>
       </form>
     </div>

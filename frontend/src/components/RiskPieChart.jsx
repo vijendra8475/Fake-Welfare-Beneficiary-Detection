@@ -1,32 +1,43 @@
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from "chart.js"
-import { Pie } from "react-chartjs-2"
+import { Doughnut } from "react-chartjs-2"
+import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js"
 
-ChartJS.register(ArcElement, Tooltip, Legend)
+ChartJS.register(ArcElement, Tooltip)
 
 export default function RiskPieChart({ data }) {
-  const high = data.filter(d => d.risk_level === "High").length
-  const low = data.filter(d => d.risk_level === "Low").length
+  const avgFraud =
+    data.reduce((acc, item) => acc + item.fraud_percentage, 0) /
+    (data.length || 1)
 
   const chartData = {
-    labels: ["High Risk", "Low Risk"],
     datasets: [
       {
-        data: [high, low],
-        backgroundColor: ["#ef4444", "#22c55e"],
-        borderWidth: 1,
+        data: [avgFraud, 100 - avgFraud],
+        backgroundColor: ["#ef4444", "#e5e7eb"],
+        borderWidth: 0,
       },
     ],
   }
 
+  const options = {
+    cutout: "75%",
+    plugins: {
+      legend: { display: false },
+    },
+  }
+
   return (
-    <div className="bg-white p-4 rounded-xl">
-      <h2 className="text-xl font-semibold mb-4">Risk Distribution</h2>
-      <Pie data={chartData} />
+    <div className="bg-white/60 backdrop-blur-lg border border-white/40 p-6 rounded-2xl shadow-lg flex flex-col items-center">
+      <h2 className="text-lg font-semibold mb-4">
+        Average Fraud Risk
+      </h2>
+
+      <div className="w-40">
+        <Doughnut data={chartData} options={options} />
+      </div>
+
+      <p className="mt-4 text-2xl font-bold">
+        {avgFraud.toFixed(1)}%
+      </p>
     </div>
   )
 }

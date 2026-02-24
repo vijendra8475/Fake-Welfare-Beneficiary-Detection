@@ -1,6 +1,6 @@
 export default function DashboardLayout({ children }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-200 to-gray-300 flex p-6">
+    <div className="min-h-screen bg-linear-to from-gray-200 to-gray-300 flex p-6">
       
       {/* Glass Container */}
       <div className="flex w-full rounded-3xl bg-white/40 backdrop-blur-xl shadow-2xl overflow-hidden">
